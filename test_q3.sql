@@ -20,6 +20,8 @@ INSERT INTO products VALUES (10001,14,'ACADEMY ACADEMY','ENELOPE GUINESS',25.99,
 
 UPDATE inventory SET quan_in_stock = 5000 WHERE prod_id = 10001;
 SELECT * FROM inventory WHERE prod_id=10001;
+SELECT * FROM reorder WHERE prod_id = 10001;
+
 
 SELECT * FROM products ORDER BY prod_id DESC LIMIT 1;
 SELECT * FROM customers ORDER BY customerid DESC LIMIT 1;
