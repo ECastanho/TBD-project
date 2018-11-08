@@ -18,6 +18,12 @@ THEN
 				 AND P.category = 11
 				 AND O.orderid = id_order);
 
+	IF quantity IS NULL 
+	THEN 
+	quantity:=0;
+	discount:=0;
+	END IF;
+
 	-- Assign discount according to number of movies acquired
 	IF quantity>0 AND quantity<5
 	THEN
@@ -46,21 +52,23 @@ THEN
 					AND O.orderid=id_order
 					AND P.category != 11);
 	
+	IF h_price IS NULL 
+	THEN 
+	h_price:=0;
+	END IF;
+
+	IF other_price IS NULL 
+	THEN 
+	other_price:=0;
+	END IF;
+
 	-- Calculate total amount with discount
 	ntotalamount := other_price + (h_price * (1-discount));
 
 	UPDATE orders SET totalamount = ntotalamount WHERE orderid = id_order;
 
-ELSE
-	discount := 0;
-	ntotalamount := (SELECT SUM(P.price * OL.quantity)
-					FROM orderlines OL, orders O, products P
-					WHERE O.orderid = OL.orderid
-					AND P.prod_id = OL.prod_id
-					AND O.orderid=id_order);
-
 END IF;
-RETURN ntotalamount;
+RETURN 0;
 END;
 $$ LANGUAGE plpgsql;
 
