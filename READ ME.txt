@@ -29,3 +29,12 @@ FASE 1:
 - Alterações às funções create_orders e buy_popular_products (Operação 2): array bidimensional substituído por 2 arrays unidimensionais
 - Alteração à função buy_popular_products (Operação 2), no argumento do WHILE: OR substituído por AND
 - Alteração à função halloween_discount (Operação 1): inserida linha para UPDATE do preço final (totalamount)
+
+
+
+Checkpoint 4
+
+FASE 0
+
+FASE 1:
+- Alterações à função halloween_discount (operação 1): inseridos "if" para evitar variáveis NULL; eliminadas linhas após UPDATE orders (eram redundantes)
