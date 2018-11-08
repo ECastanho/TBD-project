@@ -64,8 +64,6 @@ RETURN ntotalamount;
 END;
 $$ LANGUAGE plpgsql;
 
---SELECT * FROM orders;
-
 
 --AUXILIAR FUNCTIONS
 
