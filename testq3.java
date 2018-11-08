@@ -9,7 +9,6 @@
 //2018-11-07
 
 
-
 // Importação da funcionalidade JDBC.
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -17,7 +16,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-class testq3 implements Runnable{
+class Testq3 implements Runnable{
 
   // private:
   // Caminho de acesso à base de dados.
@@ -36,8 +35,9 @@ class testq3 implements Runnable{
 	private static final String order1 = "SELECT auto_reorder('2018-10-17', '2018-10-17');";
 	private static final String order2 = "SELECT create_order (20001,'{10001}','{5000}',1);";
 
-	private static String string_inside="";
+	private String string_inside="";
 
+  private int numThread = 0;
 
 
   // Ligação à base de dados.
@@ -47,10 +47,10 @@ class testq3 implements Runnable{
 
 	//public:
 	//construtor 
-	//construtor 
-	public testq3(String a) {
-		string_inside = a;
-    System.out.println("Nova instancia da classe testq3");
+	public Testq3(String a, int numThread) {
+		this.string_inside = a;
+    this.numThread = numThread;
+    System.out.println("Nova instancia da classe Testq3");
   }
 
 
@@ -67,7 +67,7 @@ class testq3 implements Runnable{
       System.out.println("A preparar o comando");
       System.out.println(string_inside);
 
- 			objComando = objLigacao.prepareCall(string_inside);
+ 		objComando = objLigacao.prepareCall(string_inside);
       objComando.execute();
       objComando.close();
 
@@ -76,6 +76,12 @@ class testq3 implements Runnable{
     } // try
     catch (SQLException objExcepcao) {
 			System.out.println(objExcepcao.getMessage());
+
+          // If something failed rollback the operations
+          //objComando.close();
+          //objLigacao.rollback();
+
+          System.out.println("fail");
     }
     System.out.println("end of run() method");
   }// run()
@@ -95,8 +101,8 @@ class testq3 implements Runnable{
 
     // Duas instâncias, cada uma com o seu espaço em memória.
     // (?) Reservamos o espaço em memória (?)
-    testq3 objInstancia1 = new testq3(order1);
-    testq3 objInstancia2 = new testq3(order2);
+    Testq3 objInstancia1 = new Testq3("SELECT auto_reorder_with_locks('2018-10-17', '2018-10-17');",1);
+    Testq3 objInstancia2 = new Testq3("SELECT create_order (20001,'{10001}','{5000}',1);",2);
 
     // Associação de threads às duas instâncias de AcessoConcorrente.
     Thread objThread1 = new Thread(objInstancia1); // ?
@@ -105,19 +111,20 @@ class testq3 implements Runnable{
     // Início de actividade de ambas as threads - ver método run().
     System.out.println("objThread1.start();");
     objThread1.start();
+
     System.out.println("objThread2.start();");
     objThread2.start();
 
     // Aguarda fim de actividade de ambas as threads.
     System.out.println("Aguardando fim de actividade de ambas as threads");
 
-		/*
+    
     try {
       objThread1.join();
-      objThread2.join();
+    	objThread2.join();
     } catch (InterruptedException objExcepcao) { }
-		*/
+	
 
     System.out.println("Testing it");
   } // end of main
-}//Class testq3
+}//Class Testq3
