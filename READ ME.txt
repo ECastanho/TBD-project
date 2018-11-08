@@ -1,0 +1,31 @@
+TBD - 2018/2019
+Grupo 7 
+
+
+Checkpoint 2
+
+
+FASE 0:
+Alterações à operação 1: 
+- adicionado input: id da encomenda.
+- adicionado ao output que o histórico do cliente também deve ser atualizado conforme o pedido selecionado.
+
+
+Alterações à operação 2:
+- alteração à descrição: caso o cliente já tenha adquirido anteriormente algum dos itens mais populares de uma dada categoria, é selecionado o segundo item mais popular (e assim por diante). Em caso de empate de popularidade de um item, é selecionado aquele que tiver maior quantidade em stock.
+
+
+Alterações à operação 3:
+- adicionado input: data em que foi verificado stock em baixo, data em que foi feita encomenda, data esperada para receber encomenda.
+
+
+
+
+Checkpoint 3
+
+
+FASE 0: sem novas alterações
+FASE 1: 
+- Alterações às funções create_orders e buy_popular_products (Operação 2): array bidimensional substituído por 2 arrays unidimensionais
+- Alteração à função buy_popular_products (Operação 2), no argumento do WHILE: OR substituído por AND
+- Alteração à função halloween_discount (Operação 1): inserida linha para UPDATE do preço final (totalamount)
