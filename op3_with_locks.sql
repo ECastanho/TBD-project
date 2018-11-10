@@ -10,7 +10,7 @@ Vquan_in_stock inventory.quan_in_stock%TYPE;
 Vsales         inventory.sales%TYPE;
 i 				integer;
 BEGIN
-LOCK inventory IN EXCLUSIVE ACCESS MODE;
+LOCK inventory IN  ACCESS EXCLUSIVE MODE;
 
 SELECT COUNT(prod_id) FROM inventory INTO numentries;
 
@@ -49,7 +49,7 @@ CREATE OR REPLACE FUNCTION new_reorder_with_locks(
 DECLARE
 	quantlow  reorder.quan_low%TYPE;
 BEGIN
-	LOCK inventory IN EXCLUSIVE ACCESS MODE;
+	LOCK inventory IN  ACCESS EXCLUSIVE MODE;
 
 	SELECT quan_in_stock FROM inventory WHERE prod_id = prodid INTO quantlow;
 	IF (prodid IS NOT NULL) THEN -- Test if the id is valid. The product for reordering must exist
