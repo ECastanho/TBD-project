@@ -1,4 +1,4 @@
--- This code contains every code to test query 3 and related tasks 
+-- This code contains some code to test query 3 and related tasks 
 
 
 SELECT * FROM reorder;
