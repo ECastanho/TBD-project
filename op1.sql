@@ -80,7 +80,7 @@ RETURNS bit AS $$
 DECLARE
 	order_date orders.orderdate%TYPE;
 BEGIN
-order_date := (SELECT orderdate
+order_date := (SELECT O.orderdate
 			   FROM orders O
 			   WHERE O.orderid = id_order);
 			  
