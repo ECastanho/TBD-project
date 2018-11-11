@@ -34,7 +34,14 @@ FASE 1:
 
 Checkpoint 4
 
-FASE 0
+FASE 0: 
+- devido à redução do grupo de 5 elementos para 3, ficou acordado com a professora fazer cair uma das nossas operações, tendo optado por fazer cair a operação 2.
 
 FASE 1:
 - Alterações à função halloween_discount (operação 1): inseridos "if" para evitar variáveis NULL; eliminadas linhas após UPDATE orders (eram redundantes)
+- função create_order foi reescrita
+- funções da operação 3 foram reescrita
+
+
+FASE 2:
+- para evitar concorrência na função create_order foram criadas as funções create_order_with_locks e generate_empty_order_with_locks; o código java ConcurrencyAnomaly1.java foi ajustado para ir buscar estas novas funções
