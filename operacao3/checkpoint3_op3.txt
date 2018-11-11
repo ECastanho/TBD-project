@@ -1,0 +1,32 @@
+--------------------------------------
+------- PROBLEMAS DE CONCORRêNCIA  ---
+--------------------------------------
+
+A operação 3 é constituida por duas partes:
+-Uma primeira onde lê a tabela inventory
+-Uma segunda onde adiciona tuplos na tabela reorder
+
+A terceira operação entra em conflito com a create_orders, uma vez que a create_orders actualiza a tabela inventory, e a operação lê a tabela, o que pode levar a que um produto fique abaixo da quantidade minima de stock ao mesmo tempo que a função lê a tabela, e não seja capaz de se aperceber desta mudança de stock:
+
+EXPLAIN ANALYSE SELECT auto_reorder_with_locks('2018-11-01','2018-11-01');
+SELECT create_order (20001,'{10001}','{5000}',1);
+(supondo que o artigo prod_id = 10001 fica abaixo da quantidade minima com a compra das unidades)
+
+Ao executar estas duas queries de forma concorrênte no java, o create_order efetua com sucesso a compra (como esperado).
+Simultaneamente, a create order não dá ordens de reorder do artigo 10001.
+
+Para resolver este problema, teorizou-se que se deveria implementar um S-LOCK na tabela inventory, de forma a impedir outra operação de a actualizar enquanto a operação 3 a lia.
+
+Implementou-se a função com um "ACCESS EXCLUSIVE MODE", que apesar de resolver o problema de concorrência, não é um lock adequado ao problema. Ainda está por implementar a colocação um LOCK menos restritivo.
+
+
+--------------------------------------
+------- PROBLEMAS DE OPTIMIZAÇÃO   ---
+--------------------------------------
+
+A função auto_reorder tinha no seu interior múltiplos queries de SELECT sobre a tabela inventory, que levava a um tempo médio de execução de cerca de 17 s. 
+A função foi optimizada através de uma re-escrita da função na sua globalidade, reduzindo a função a um só query:
+
+"SELECT prod_id,quan_in_stock,sales FROM inventory;"
+
+A re-escrita da função permitiu a redução do tempo de execução para cerca de 0.08 s. A operação de seleção é feita através de um sequencial scan, o que não pode ser optimizado através de indices, uma vez que a função vai ler toda a tabela inventory.
