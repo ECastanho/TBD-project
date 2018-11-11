@@ -22,7 +22,7 @@ class Testq3 implements Runnable{
   // Caminho de acesso à base de dados.
   private static final String LIGACAO = "jdbc:postgresql://localhost:5432/tbd";
   private static final String UTILIZADOR = "postgres";
-  private static final String SENHA = "4499947";  
+  private static final String SENHA = "";  
 
 
   // AUXILIAR LINES OF CODE TO INSERT TEST TUPLES INTO DB 
