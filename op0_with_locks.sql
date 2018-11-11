@@ -1,8 +1,7 @@
-
 -- MAIN FUNCTION
 
 
-CREATE OR REPLACE FUNCTION create_order (
+CREATE OR REPLACE FUNCTION create_order_with_locks (
     customer_id  	customers.customerid%TYPE,
     ordered_products 	integer [],
     quantity_products	integer [],
@@ -21,7 +20,7 @@ DECLARE
 BEGIN
 
 	--Creating an empty order
-	order_id := (SELECT generate_empty_order(customer_id, order_date));
+	order_id := (SELECT generate_empty_order_with_locks(customer_id, order_date));
 	-- For each item in the order
 	WHILE index <= number_prod LOOP	--FOR selected_item IN ordered_products 
 		product_id := ordered_products[index];
@@ -65,16 +64,19 @@ $$ LANGUAGE plpgsql;
 
 --AUXILIAR FUNCTIONS
 
-CREATE OR REPLACE FUNCTION generate_empty_order(
+CREATE OR REPLACE FUNCTION generate_empty_order_with_locks(
 	customer_id  customers.customerid%TYPE,
 	orderdate orders.orderdate%TYPE)
 	RETURNS orders.orderid%TYPE AS $$
 DECLARE
 	order_id	orders.orderid%TYPE;
 BEGIN
+--LOCK	
+LOCK orders IN  ACCESS EXCLUSIVE MODE;
+											 
 	order_id := (SELECT MAX(orderid)+1 FROM orders);
-    --LOCK
-    LOCK orders IN ACCESS SHARE;
+						 
+
 	INSERT INTO orders (orderid, customerid, orderdate, netamount, tax, totalamount)
 	VALUES (order_id, customer_id, orderdate, 0, 0, 0); 
 	RETURN order_id;
@@ -119,4 +121,3 @@ WHERE prod_id = prodid;
 RETURN 0;
 END;
 $$ LANGUAGE plpgsql;
-
